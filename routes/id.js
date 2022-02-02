@@ -49,10 +49,22 @@ router.post('/', async (req, res) => {
         let id;
         if (sanitizedAccountType === 'minecraft') {
             const response = await mariadb.query('SELECT discordId FROM discord_link_data WHERE minecraftId = ?', [providedId]);
+            if (!response[0]) {
+                res.status(400).json({
+                    success: false, error: 'No Discord account exists for that id!'
+                });
+                return;
+            }
             id = response[0].discordId;
         }
         if (sanitizedAccountType === 'discord') {
             const response = await mariadb.query('SELECT minecraftId FROM discord_link_data WHERE discordId = ?', [providedId]);
+            if (!response[0]) {
+                res.status(400).json({
+                    success: false, error: 'No Minecraft account exists for that id!'
+                });
+                return;
+            }
             id = response[0].minecraftId;
         }
         await redis.set(sanitizedAccountType + ':' + providedId, id, {EX: 60 * 10});

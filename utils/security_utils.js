@@ -8,7 +8,6 @@ async function verifyApiKey(apiKey) {
     const notExists = await redis.exists('api-key:' + apiKey).then(exists => !exists);
     if (notExists) {
         const response = await mariadb.query('SELECT * FROM discord_link_api_keys WHERE apiKey = ?;', [apiKey]);
-        console.log(response);
         if (!response[0]) {
             return false;
         }
