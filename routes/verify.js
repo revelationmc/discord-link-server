@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
     const minecraftId = await redis.get(verificationCode);
 
     await redis.del(verificationCode);
-    await redis.del(minecraftId);
+    await redis.del('verification:' + minecraftId);
 
     await redis.set('discord:' + discordUserId, minecraftId, {EX: 60 * 10});
     await redis.set('minecraft:' + minecraftId, discordUserId, {EX: 60 * 10});

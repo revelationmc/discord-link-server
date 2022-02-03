@@ -11,7 +11,7 @@ const pool = mariadb.createPool({
     password: config.password
 });
 
-pool.query('CREATE TABLE IF NOT EXISTS discord_link_data (minecraftId VARCHAR(36), discordId TEXT);')
+pool.query('CREATE TABLE IF NOT EXISTS discord_link_data (minecraftId VARCHAR(36) PRIMARY KEY NOT NULL , discordId TEXT NOT NULL);')
     .finally(() => {
         console.log('Successfully connected to SQL database.')
     });
